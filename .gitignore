@@ -50,3 +50,15 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# ignore data files
+*.dat
+*.matrix
+*.swp
+*.mat
+
+# ignore ctags files
+tags
+
+# ignore binaries and builds
+/build/
