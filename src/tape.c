@@ -64,7 +64,7 @@ void * tape_push(tape_t *tape, size_t size) {
         tape->max_length *= 2;
         tape->elems = realloc((void *)tape->elems, tape->max_length);
 
-        if (!elems) {
+        if (!tape->elems) {
             return NULL;
         }
     }
