@@ -15,6 +15,20 @@ typedef struct _tape_t {
     size_t  max_length; ///<Maximal number of bytes.
 } tape_t;
 
+tape_t *tape_bind(void *buffer, size_t length) {
+    tape_t *tape = malloc(sizeof(tape_t));
+
+    if (!tape) {
+        return NULL;
+    }
+
+    tape->elems = buffer;
+    tape->cur_length = 0;
+    tape->max_length = length;
+
+    return tape;
+}
+
 tape_t *tape_create(size_t length) {
     tape_t * tape = malloc(sizeof(tape_t));
 

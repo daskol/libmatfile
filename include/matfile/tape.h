@@ -23,6 +23,17 @@
 typedef struct _tape_t tape_t;
 
 /**
+ *  Allocate memory only for tape_t data structure and use given buffer as base
+ *  tape buffer.
+ *
+ *  \param[in] buffer
+ *  \param[in] length
+ *  \return If buffer binded successfuly return pointer to tape, otherwise null
+ *  pointer.
+ */
+tape_t *tape_bind(void *buffer, size_t length);
+
+/**
  *  Creates new tape object.
  *
  *  \param[in] length Maximal length of tape buffer.
