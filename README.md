@@ -27,13 +27,13 @@ not all API routines are stable.
 ## Usage
 
 Suppose there is a mat-file which contains at least one matrix. The matrix is
-Hilbert matrix that could be defined in following manner.
+The matrix is Hilbert if the following holds.
 
 ![Definition of Hilbert matrix.](doc/hilbert.png)
 
-May be the matrix is adjacency matrix of social graph or item-feature matrix of
-recommender system. In either case we need to load the matrix and perform some
-calculations.  There is example of how to archive these things bellow.
+Maybe the matrix is adjacency matrix of social graph or item-feature matrix of
+recommender system. In either case, we need to load the matrix and perform some
+calculations.  There is an example of how to archive these things below.
 
 ```c
 #include <matfile/matfile.h>
@@ -71,4 +71,4 @@ See details in [CMakeLists.txt](CMakeLists.txt).
 
 ## Credits
 
-&copy; Daniel Bershatsky <daniel.bershatsky@skolkovotech.ru>, 2018
+&copy; Daniel Bershatsky <<mailto:daniel.bershatsky@skolkovotech.ru>>, 2018
