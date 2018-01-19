@@ -20,6 +20,7 @@ and their readiness is placed bellow.
 - [ ] Memory map support for large files.
 - [ ] C++ wrapper and bindings to other languages if needed.
 - [ ] MAT-file Level 4 support.
+- [ ] Coverage and unit testing.
 
 The list is not filled completely yet since library is under development and
 not all API routines are stable.
@@ -68,6 +69,19 @@ After compilation `libmatfile.a` or `libmatfile.so` depending on desired
 linking mechanism appears in build directory. Moreover, there is doxygen
 documentation in `doc/html/index.html` relative to build directory as well.
 See details in [CMakeLists.txt](CMakeLists.txt).
+
+## Documentation
+
+On default documentation is built with library. One can control doc generation
+on uild with `DOXYGEN_HTML`. The following code snippet shows how to disable
+HTML documentation output.
+
+```bash
+cmake .. -DDOXYGEN_HTML=OFF
+```
+
+The latest documentation is already generated and the online version is
+provided [here](https://daskol.xyz/doc/daskol/libmatfile).
 
 ## Credits
 

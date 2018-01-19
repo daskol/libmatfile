@@ -5,8 +5,10 @@ cmake_policy(SET CMP0011 NEW)
 cmake_policy(SET CMP0048 NEW)
 
 project(matfile
-        VERSION 0.0.0
+        VERSION 0.1.0
         LANGUAGES C CXX)
+
+option(DOXYGEN_HTML "Build HTML documentation with Doxygen." ON)
 
 #   Make sure that the default is a RELEASE.
 if(NOT CMAKE_BUILD_TYPE)
@@ -21,9 +23,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 find_package(Sphinx REQUIRED)
 find_package(Doxygen REQUIRED)
 find_package(ZLIB REQUIRED)
-
-message(STATUS "${ZLIB_LIBRARIES}")
-message(STATUS "${ZLIB_INCLUDE_DIRS}")
 
 #   Common compiler options.
 set(CMAKE_C_STANDARD 11)
@@ -40,20 +39,33 @@ source_group(lib-sources FILES ${LIB_SOURCES})
 
 #   Build executable and library.
 add_library(matfile-obj OBJECT ${LIB_SOURCES})
-add_library(matfile STATIC $<TARGET_OBJECTS:matfile-obj>)
+add_library(matfile-static STATIC $<TARGET_OBJECTS:matfile-obj>)
+add_library(matfile-shared SHARED $<TARGET_OBJECTS:matfile-obj>)
 add_executable(matfile-cli $<TARGET_OBJECTS:matfile-obj> ${CLI_SOURCES})
 
-target_link_libraries(matfile ${ZLIB_LIBRARIES})
+set_property(TARGET matfile-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET matfile-static PROPERTY OUTPUT_NAME matfile)
+set_property(TARGET matfile-shared PROPERTY OUTPUT_NAME matfile)
+
+target_link_libraries(matfile-static ${ZLIB_LIBRARIES})
+target_link_libraries(matfile-shared ${ZLIB_LIBRARIES})
 target_link_libraries(matfile-cli ${ZLIB_LIBRARIES})
 
 #   Define test to run.
 enable_testing()
 
-#   TODO: Install executables and libs.
+#   Install executables and libs.
+install(TARGETS matfile-cli matfile-shared matfile-static
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+install(DIRECTORY include/matfile/
+        DESTINATION include/matfile
+        FILES_MATCHING PATTERN "*.h")
 
 #   Configured documentation tools and intermediate build results.
-
-if(DOXYGEN_FOUND)
+if(DOXYGEN_HTML AND DOXYGEN_FOUND)
     set(DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/doc")
     set(DOXYGEN_XML_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/doc/xml")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in"
@@ -64,7 +76,10 @@ if(DOXYGEN_FOUND)
                       "${DOXYGEN_EXECUTABLE}"
                       "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile" > /dev/null
                       COMMENT "Building documentation with Doxygen")
-else(DOXYGEN_FOUND)
+elseif(NOT DOXYGEN_FOUND)
     message(STATUS
             "WARNING: Doxygen not found. Skip doxygen doc building")
-endif(DOXYGEN_FOUND)
+else(DOXYGEN_HTML AND DOXYGEN_FOUND)
+    message(STATUS
+            "NOTE: Skip doxygen doc building")
+endif(DOXYGEN_HTML AND DOXYGEN_FOUND)
