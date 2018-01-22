@@ -83,6 +83,22 @@ cmake .. -DDOXYGEN_HTML=OFF
 The latest documentation is already generated and the online version is
 provided [here](https://daskol.xyz/doc/daskol/libmatfile).
 
+## Testing
+
+Similar to documentation generation tests are built on default. There is
+built-in option `BUILD_TESTING` which controls adding testing targets to
+global target.
+
+```bash
+cmake .. -DBUILD_TESTING=ON
+ctest  # or for more verbosity ./matfile-test
+```
+
+The previous commands force building tests and run `ctest` for brief output.
+The testing is based on top of Google Test framework so executable
+`matfile-test` produces more detailed output that could be usefull for
+developers.
+
 ## Credits
 
 &copy; Daniel Bershatsky <<mailto:daniel.bershatsky@skolkovotech.ru>>, 2018

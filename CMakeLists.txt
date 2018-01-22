@@ -24,18 +24,27 @@ find_package(Sphinx REQUIRED)
 find_package(Doxygen REQUIRED)
 find_package(ZLIB REQUIRED)
 
+#   Import targets from dependencies.
+add_subdirectory(deps/googletest EXCLUDE_FROM_ALL)
+
 #   Common compiler options.
 set(CMAKE_C_STANDARD 11)
 
 #   Set up search paths.
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/googletest/googletest/include)
 
 #   Define sources and source groups.
 set(LIB_SOURCES src/matfile.c
                 src/tape.c)
 set(CLI_SOURCES src/main.cc)
+set(TEST_SOURCES test/main.cc
+                 test/reader.cc
+                 test/writer.cc)
 
 source_group(lib-sources FILES ${LIB_SOURCES})
+source_group(test-sources FILES ${TEST_SOURCES})
 
 #   Build executable and library.
 add_library(matfile-obj OBJECT ${LIB_SOURCES})
@@ -53,6 +62,12 @@ target_link_libraries(matfile-cli ${ZLIB_LIBRARIES})
 
 #   Define test to run.
 enable_testing()
+
+if(BUILD_TESTING)
+    add_executable(matfile-test $<TARGET_OBJECTS:matfile-obj> ${TEST_SOURCES})
+    add_test(NAME test-all COMMAND matfile-test)
+    target_link_libraries(matfile-test ${ZLIB_LIBRARIES} gtest_main)
+endif(BUILD_TESTING)
 
 #   Install executables and libs.
 install(TARGETS matfile-cli matfile-shared matfile-static
