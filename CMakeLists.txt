@@ -64,6 +64,9 @@ install(DIRECTORY include/matfile/
         DESTINATION include/matfile
         FILES_MATCHING PATTERN "*.h")
 
+install(FILES LICENSE
+        DESTINATION share/licenses/matfile)
+
 #   Configured documentation tools and intermediate build results.
 if(DOXYGEN_HTML AND DOXYGEN_FOUND)
     set(DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/doc")
